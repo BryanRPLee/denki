@@ -1,6 +1,5 @@
 local Entity = require("src.core.entity")
 local Rigidbody = require("src.physics.rigidbody")
-local Sound = require("src.audio.sound")
 
 local JUMP_FORCE = 8.0
 local EYE_HEIGHT = 1.7
@@ -16,9 +15,8 @@ local Player = {}
 Player.__index = Player
 
 ---@param physics any
----@param audio any
 ---@return Player
-function Player.new(physics, audio)
+function Player.new(physics)
     local self = setmetatable({}, Player)
 
     self.entity = Entity.new("Player")
@@ -33,16 +31,6 @@ function Player.new(physics, audio)
     self._footstepTimer = 0
     self._wasGrounded = false
     self._isMoving = false
-
-    if audio then
-        local ok1 = pcall(function() self.entity:addComponent("sound_footstep", Sound.new(audio, "footstep", "assets/sounds/footstep.wav")) end)
-        local ok2 = pcall(function() self.entity:addComponent("sound_jump", Sound.new(audio, "jump", "assets/sounds/jump.wav")) end)
-        local ok3 = pcall(function() self.entity:addComponent("sound_land", Sound.new(audio, "land", "assets/sounds/land.wav")) end)
-
-        if not (ok1 and ok2 and ok3) then
-            print("[Player] Warning: some sounds failed to load")
-        end
-    end
 
     return self
 end
@@ -89,25 +77,12 @@ function Player:update(input, camera, dt)
     if input:isActionPressed("JUMP") and rb.isGrounded then
         rb.velocity.y = JUMP_FORCE
         rb.isGrounded = false
-        local jumpSound = self.entity:getComponent("sound_jump")
-        if jumpSound then
-            jumpSound:play()
-        end
-    end
-
-    if not self._wasGrounded and rb.isGrounded then
-        local landSound = self.entity:getComponent("sound_land")
-        if landSound then
-            landSound:play()
-        end
     end
 
     if rb.isGrounded and self._isMoving then
         self._footstepTimer = self._footstepTimer + dt
         if self._footstepTimer >= FOOTSTEP_INTERVAL then
             self._footstepTimer = self._footstepTimer - FOOTSTEP_INTERVAL
-            local footstepSound = self.entity:getComponent("sound_footstep")
-            if footstepSound then footstepSound:play() end
         end
     else
         self._footstepTimer = 0

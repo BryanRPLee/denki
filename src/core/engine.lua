@@ -7,7 +7,6 @@ local Mesh = require("src.renderer.mesh")
 local Physics = require("src.physics.physics")
 local Rigidbody = require("src.physics.rigidbody")
 local Player = require("src.core.player")
-local Audio = require("src.audio.audio")
 local rl = require("libs.raylib")
 
 ---@class Engine
@@ -17,7 +16,6 @@ local rl = require("libs.raylib")
 ---@field physics Physics
 ---@field scene Scene
 ---@field player Player
----@field audio Audio
 ---@field running boolean
 local Engine = {}
 Engine.__index = Engine
@@ -31,7 +29,6 @@ function Engine.new()
     self.input = Input.new()
     self.physics = Physics.new()
     self.scene = Scene.new("MainScene")
-    self.audio = Audio.new()
 
     return self
 end
@@ -97,9 +94,6 @@ end
 function Engine:shutdown()
     self.input:enableCursor()
     self.scene:clear()
-    if self.audio then
-        self.audio:shutdown()
-    end
     self.renderer:shutdown()
     print("[Engine] Shutdown complete.")
 end
@@ -134,7 +128,7 @@ function Engine:_populateScene()
     makeStaticCube("CubeC", -5, 0.75, -5, 1.5, 1.5, 1.5, Renderer.colors.GREEN)
     makeStaticCube("Wall1", 10, 2, 0, 1, 4, 10, Renderer.colors.DARKGRAY)
 
-    self.player = Player.new(self.physics, self.audio)
+    self.player = Player.new(self.physics)
     self.scene:add(self.player.entity)
 
     print("[Engine] Scene populated: " .. self.scene:entityCount() .. " entities")
