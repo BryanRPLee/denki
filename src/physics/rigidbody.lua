@@ -1,11 +1,21 @@
 local Vec3 = require("src.core.vec3")
 local AABB = require("src.physics.aabb")
 
+---@class Rigidbody
+---@field entity any
+---@field velocity Vec3
+---@field mass number
+---@field useGravity boolean
+---@field isStatic boolean
+---@field isGrounded boolean
+---@field restitution number
 local Rigidbody = {}
 Rigidbody.__index = Rigidbody
 
 local GRAVITY = -20.0
 
+---@param options? table<string, any>
+---@return Rigidbody
 function Rigidbody.new(options)
     local self = setmetatable({}, Rigidbody)
 
@@ -21,10 +31,14 @@ function Rigidbody.new(options)
     return self
 end
 
+---@return AABB
 function Rigidbody:getAABB()
     return AABB.fromTransform(self.entity.transform)
 end
 
+---@param x number
+---@param y number
+---@param z number
 function Rigidbody:applyForce(x, y, z)
     if self.isStatic then
         return
@@ -34,6 +48,7 @@ function Rigidbody:applyForce(x, y, z)
     self.velocity.z = self.velocity.z + (z / self.mass)
 end
 
+---@param dt number
 function Rigidbody:update(dt)
     if self.isStatic then
         return

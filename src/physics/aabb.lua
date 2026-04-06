@@ -1,8 +1,14 @@
 local Vec3 = require("src.core.vec3")
 
+---@class AABB
+---@field min Vec3
+---@field max Vec3
 local AABB = {}
 AABB.__index = AABB
 
+---@param min? Vec3
+---@param max? Vec3
+---@return AABB
 function AABB.new(min, max)
     local self = setmetatable({}, AABB)
 
@@ -12,6 +18,8 @@ function AABB.new(min, max)
     return self
 end
 
+---@param transform any
+---@return AABB
 function AABB.fromTransform(transform)
     local p = transform.position
     local hs = transform.scale * .5
@@ -22,12 +30,16 @@ function AABB.fromTransform(transform)
     )
 end
 
+---@param other AABB
+---@return boolean
 function AABB:intersects(other)
     return self.min.x <= other.max.x and self.max.x >= other.min.x
         and self.min.y <= other.max.y and self.max.y >= other.min.y
         and self.min.z <= other.max.z and self.max.z >= other.min.z
 end
 
+---@param other AABB
+---@return Vec3
 function AABB:penetration(other)
     local ox = math.min(self.max.x, other.max.x) - math.max(self.min.x, other.min.x)
     local oy = math.min(self.max.y, other.max.y) - math.max(self.min.y, other.min.y)
@@ -35,6 +47,7 @@ function AABB:penetration(other)
     return Vec3.new(ox, oy, oz)
 end
 
+---@return Vec3
 function AABB:center()
     return Vec3.new(
         (self.min.x + self.max.x) * 0.5,
@@ -43,6 +56,7 @@ function AABB:center()
     )
 end
 
+---@return string
 function AABB:__tostring()
     return string.format("AABB(min=%s, max=%s)", tostring(self.min), tostring(self.max))
 end

@@ -1,13 +1,28 @@
 local ffi = require("ffi")
 local rl = require("libs.raylib")
 
+---@param degrees number
+---@return number
 local function toRad(degrees)
     return degrees * (math.pi / 180.0)
 end
 
+---@class Camera
+---@field x number
+---@field y number
+---@field z number
+---@field yaw number
+---@field pitch number
+---@field moveSpeed number
+---@field mouseSens number
+---@field data any
 local Camera = {}
 Camera.__index = Camera
 
+---@param posX? number
+---@param posY? number
+---@param posZ? number
+---@return Camera
 function Camera.new(posX, posY, posZ)
     local self = setmetatable({}, Camera)
 
@@ -31,6 +46,8 @@ function Camera.new(posX, posY, posZ)
     return self
 end
 
+---@param input any
+---@param dt number
 function Camera:update(input, dt)
     local dx, dy = input:getMouseDelta()
 

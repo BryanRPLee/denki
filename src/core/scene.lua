@@ -1,6 +1,13 @@
+---@class Scene
+---@field name string
+---@field entities table
+---@field _byName table<string, any>
+---@field _byTag table<string, any>
 local Scene = {}
 Scene.__index = Scene
 
+---@param name? string
+---@return Scene
 function Scene.new(name)
     local self = setmetatable({}, Scene)
 
@@ -14,6 +21,8 @@ function Scene.new(name)
     return self
 end
 
+---@param entity any
+---@return any
 function Scene:add(entity)
     table.insert(self.entities, entity)
     self._byName[entity.name] = entity
@@ -28,6 +37,7 @@ function Scene:add(entity)
     return entity
 end
 
+---@param entity any
 function Scene:remove(entity)
     for i, e in ipairs(self.entities) do
         if e.id == entity.id then
@@ -38,14 +48,19 @@ function Scene:remove(entity)
     end
 end
 
+---@param name string
+---@return any
 function Scene:getByName(name)
     return self._byName[name]
 end
 
+---@param tag string
+---@return table
 function Scene:getByTag(tag)
     return self._byTag[tag] or {}
 end
 
+---@param dt number
 function Scene:update(dt)
     for _, entity in ipairs(self.entities) do
         entity:update(dt)
@@ -72,6 +87,7 @@ function Scene:clear()
     print("[Scene] Cleared.")
 end
 
+---@return number
 function Scene:entityCount()
     return #self.entities
 end

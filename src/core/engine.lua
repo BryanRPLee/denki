@@ -9,9 +9,18 @@ local Rigidbody = require("src.physics.rigidbody")
 local Player = require("src.core.player")
 local rl = require("libs.raylib")
 
+---@class Engine
+---@field renderer Renderer
+---@field camera Camera
+---@field input Input
+---@field physics Physics
+---@field scene Scene
+---@field player Player
+---@field running boolean
 local Engine = {}
 Engine.__index = Engine
 
+---@return Engine
 function Engine.new()
     local self = setmetatable({}, Engine)
 
@@ -90,6 +99,15 @@ function Engine:shutdown()
 end
 
 function Engine:_populateScene()
+    ---@param name string
+    ---@param x number
+    ---@param y number
+    ---@param z number
+    ---@param sx number
+    ---@param sy number
+    ---@param sz number
+    ---@param color any
+    ---@return Entity
     local function makeStaticCube(name, x, y, z, sx, sy, sz, color)
         local e = Entity.new(name)
         e.transform:setPosition(x, y, z)

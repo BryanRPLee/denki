@@ -3,9 +3,16 @@ local ffi = require("ffi")
 
 local Renderer = require("src.renderer.renderer")
 
+---@class Mesh
+---@field shape string
+---@field color any
+---@field entity any
 local Mesh = {}
 Mesh.__index = Mesh
 
+---@param shape? string
+---@param color? any
+---@return Mesh
 function Mesh.new(shape, color)
     local self = setmetatable({}, Mesh)
 

@@ -1,10 +1,21 @@
 local Transform = require("src.core.transform")
 
+---@class Entity
+---@field id number
+---@field name string
+---@field active boolean
+---@field transform Transform
+---@field components table<string, any>
+---@field tags table<string, boolean>
+---@field children Entity[]
+---@field parent Entity|nil
 local Entity = {}
 Entity.__index = Entity
 
 local nextId = 1
 
+---@param name? string
+---@return Entity
 function Entity.new(name)
     local self = setmetatable({}, Entity)
 
@@ -23,33 +34,44 @@ function Entity.new(name)
     return self
 end
 
+---@param name string
+---@param component any
+---@return any
 function Entity:addComponent(name, component)
     self.components[name] = component
     component.entity = self
     return component
 end
 
+---@param name string
+---@return any
 function Entity:getComponent(name)
     return self.components[name]
 end
 
+---@param name string
 function Entity:removeComponent(name)
     self.components[name] = nil
 end
 
+---@param tag string
 function Entity:addTag(tag)
     self.tags[tag] = true
 end
 
+---@param tag string
+---@return boolean
 function Entity:hasTag(tag)
     return self.tags[tag] == true
 end
 
+---@param child Entity
 function Entity:addChild(child)
     child.parent = self
     table.insert(self.children, child)
 end
 
+---@param dt number
 function Entity:update(dt)
     if not self.active then
         return

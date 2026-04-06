@@ -1,18 +1,23 @@
+---@class Physics
+---@field bodies any[]
 local Physics = {}
 Physics.__index = Physics
 
 local FLOOR_Y = 0.0
 
+---@return Physics
 function Physics.new()
     local self = setmetatable({}, Physics)
     self.bodies = {}
     return self
 end
 
+---@param rigidbody any
 function Physics:register(rigidbody)
     table.insert(self.bodies, rigidbody)
 end
 
+---@param rigidbody any
 function Physics:unregister(rigidbody)
     for i, rb in ipairs(self.bodies) do
         if rb == rigidbody then
@@ -22,6 +27,7 @@ function Physics:unregister(rigidbody)
     end
 end
 
+---@param dt number
 function Physics:update(dt)
     for _, rb in ipairs(self.bodies) do
         rb:update(dt)
@@ -38,6 +44,8 @@ function Physics:update(dt)
     end
 end
 
+---@param rbA any
+---@param rbB any
 function Physics:_resolveCollision(rbA, rbB)
     local aabbA = rbA:getAABB()
     local aabbB = rbB:getAABB()
@@ -114,6 +122,7 @@ function Physics:_resolveCollision(rbA, rbB)
     end
 end
 
+---@param rb any
 function Physics:_resolveFloor(rb)
     if rb.isStatic then
         return

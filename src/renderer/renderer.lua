@@ -1,9 +1,16 @@
 local rl = require("libs.raylib")
 local ffi = require("ffi")
 
+---@class Renderer
+---@field width number
+---@field height number
+---@field title string
+---@field fps number
+---@field colors table<string, any>
 local Renderer = {}
 Renderer.__index = Renderer
 
+---@type table<string, any>
 Renderer.colors = {
     RAYWHITE = ffi.new("Color", { 245, 245, 245, 255 }),
     BLACK = ffi.new("Color", { 0, 0, 0, 255 }),
@@ -14,6 +21,11 @@ Renderer.colors = {
     LIGHTGRAY = ffi.new("Color", { 200, 200, 200, 255 }),
 }
 
+---@param width? number
+---@param height? number
+---@param title? string
+---@param fps? number
+---@return Renderer
 function Renderer.new(width, height, title, fps)
     local self = setmetatable({}, Renderer)
 
@@ -41,6 +53,7 @@ function Renderer:endFrame()
     rl.EndDrawing()
 end
 
+---@return boolean
 function Renderer:shouldClose()
     return rl.WindowShouldClose()
 end

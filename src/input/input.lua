@@ -1,5 +1,6 @@
 local rl = require("libs.raylib")
 
+---@type table<string, number>
 local KEY = {
     W = 87,
     A = 65,
@@ -10,14 +11,18 @@ local KEY = {
     ESCAPE = 256
 }
 
+---@class Input
 local Input = {}
 Input.__index = Input
 
+---@return Input
 function Input.new()
     local self = setmetatable({}, Input)
     return self
 end
 
+---@param key string
+---@return boolean
 function Input:isKeyDown(key)
     local code = KEY[key]
     if not code then
@@ -27,6 +32,8 @@ function Input:isKeyDown(key)
     return rl.IsKeyDown(code)
 end
 
+---@param key string
+---@return boolean
 function Input:isKeyPressed(key)
     local code = KEY[key]
     if not code then
@@ -35,6 +42,7 @@ function Input:isKeyPressed(key)
     return rl.IsKeyPressed(code)
 end
 
+---@return number, number
 function Input:getMouseDelta()
     local delta = rl.GetMouseDelta()
     return delta.x, delta.y
@@ -48,6 +56,7 @@ function Input:disableCursor()
     rl.DisableCursor()
 end
 
+---@type table<string, number>
 Input.KEY = KEY
 
 return Input

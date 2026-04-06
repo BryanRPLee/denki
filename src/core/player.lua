@@ -5,9 +5,14 @@ local Vec3 = require("src.core.vec3")
 local JUMP_FORCE = 8.0
 local EYE_HEIGHT = 1.7
 
+---@class Player
+---@field entity Entity
+---@field rb Rigidbody
 local Player = {}
 Player.__index = Player
 
+---@param physics any
+---@return Player
 function Player.new(physics)
     local self = setmetatable({}, Player)
 
@@ -23,6 +28,9 @@ function Player.new(physics)
     return self
 end
 
+---@param input any
+---@param camera any
+---@param dt number
 function Player:update(input, camera, dt)
     local rb = self.rb
     local t = self.entity.transform
