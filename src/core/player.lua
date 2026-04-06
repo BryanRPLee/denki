@@ -30,12 +30,10 @@ function Player.new(physics, audio)
     self.entity:addComponent("rigidbody", self.rb)
     physics:register(self.rb)
 
-    -- Audio setup
     self._footstepTimer = 0
     self._wasGrounded = false
     self._isMoving = false
 
-    -- Only load sounds if audio system is available and working
     if audio then
         local ok1 = pcall(function() self.entity:addComponent("sound_footstep", Sound.new(audio, "footstep", "assets/sounds/footstep.wav")) end)
         local ok2 = pcall(function() self.entity:addComponent("sound_jump", Sound.new(audio, "jump", "assets/sounds/jump.wav")) end)
@@ -88,21 +86,22 @@ function Player:update(input, camera, dt)
         self._isMoving = true
     end
 
-    -- Jump
     if input:isActionPressed("JUMP") and rb.isGrounded then
         rb.velocity.y = JUMP_FORCE
         rb.isGrounded = false
         local jumpSound = self.entity:getComponent("sound_jump")
-        if jumpSound then jumpSound:play() end
+        if jumpSound then
+            jumpSound:play()
+        end
     end
 
-    -- Landing
     if not self._wasGrounded and rb.isGrounded then
         local landSound = self.entity:getComponent("sound_land")
-        if landSound then landSound:play() end
+        if landSound then
+            landSound:play()
+        end
     end
 
-    -- Footsteps
     if rb.isGrounded and self._isMoving then
         self._footstepTimer = self._footstepTimer + dt
         if self._footstepTimer >= FOOTSTEP_INTERVAL then

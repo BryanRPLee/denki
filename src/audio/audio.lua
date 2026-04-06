@@ -13,7 +13,6 @@ function Audio.new()
     self._sounds = {}
     self._initialized = false
 
-    -- Initialize audio device
     rl.InitAudioDevice()
 
     if rl.IsAudioDeviceReady() then
