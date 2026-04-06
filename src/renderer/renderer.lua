@@ -21,7 +21,7 @@ function Renderer.new(width, height, title, fps)
     self.height = height or 720
     self.title = title or "Denki"
     self.fps = fps or 60
-    
+
     return self
 end
 

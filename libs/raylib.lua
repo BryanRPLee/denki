@@ -2,7 +2,7 @@ local ffi = require("ffi")
 
 local raylib = ffi.load("/opt/homebrew/opt/raylib/lib/libraylib.dylib")
 
-ffi.cdef[[
+ffi.cdef [[
     typedef struct Vector2 { float x; float y; } Vector2;
     typedef struct Vector3 { float x; float y; float z; } Vector3;
     typedef struct Color { unsigned char r; unsigned char g; unsigned char b; unsigned char a; } Color;
