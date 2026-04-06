@@ -35,6 +35,11 @@ end
 
 function Engine:init()
     self.renderer:init()
+
+    self.input:bindAction("QUIT", "key", "ESCAPE")
+    self.input:bindAction("FIRE", "mouse", "LEFT")
+    self.input:bindAction("ALT_FIRE", "mouse", "RIGHT")
+
     self.input:disableCursor()
     self:_populateScene()
     print("[Engine] Initialized.")
@@ -43,7 +48,7 @@ end
 function Engine:update()
     local dt = rl.GetFrameTime()
 
-    if self.input:isKeyPressed("ESCAPE") then
+    if self.input:isActionPressed("QUIT") then
         self.running = false
     end
 

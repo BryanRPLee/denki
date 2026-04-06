@@ -50,25 +50,25 @@ function Player:update(input, camera, dt)
 
     self._isMoving = false
 
-    if input:isKeyDown("W") then
+    if input:isActionDown("MOVE_FORWARD") then
         rb.velocity.x = rb.velocity.x + math.sin(yawRad) * speed
         rb.velocity.z = rb.velocity.z + math.cos(yawRad) * speed
         self._isMoving = true
     end
 
-    if input:isKeyDown("S") then
+    if input:isActionDown("MOVE_BACK") then
         rb.velocity.x = rb.velocity.x - math.sin(yawRad) * speed
         rb.velocity.z = rb.velocity.z - math.cos(yawRad) * speed
         self._isMoving = true
     end
 
-    if input:isKeyDown("A") then
+    if input:isActionDown("STRAFE_LEFT") then
         rb.velocity.x = rb.velocity.x + math.cos(yawRad) * speed
         rb.velocity.z = rb.velocity.z - math.sin(yawRad) * speed
         self._isMoving = true
     end
 
-    if input:isKeyDown("D") then
+    if input:isActionDown("STRAFE_RIGHT") then
         rb.velocity.x = rb.velocity.x - math.cos(yawRad) * speed
         rb.velocity.z = rb.velocity.z + math.sin(yawRad) * speed
         self._isMoving = true

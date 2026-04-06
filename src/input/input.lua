@@ -2,12 +2,41 @@ local rl = require("libs.raylib")
 
 ---@type table<string, number>
 local KEY = {
-    W = 87, A = 65, S = 83, D = 68, C = 67, E = 69, F = 70, Q = 81, R = 82, X = 88, Z = 90,
-    SPACE = 32, TAB = 258, ESCAPE = 256,
-    LEFT_SHIFT = 340, LEFT_CTRL = 341, LEFT_ALT = 342,
-    NUM_1 = 49, NUM_2 = 50, NUM_3 = 51, NUM_4 = 52, NUM_5 = 53, NUM_6 = 54, NUM_7 = 55, NUM_8 = 56, NUM_9 = 57,
-    F1 = 290, F2 = 291, F3 = 292, F4 = 293, F5 = 294,
-    UP = 265, DOWN = 264, LEFT = 263, RIGHT = 262
+    W = 87,
+    A = 65,
+    S = 83,
+    D = 68,
+    C = 67,
+    E = 69,
+    F = 70,
+    Q = 81,
+    R = 82,
+    X = 88,
+    Z = 90,
+    SPACE = 32,
+    TAB = 258,
+    ESCAPE = 256,
+    LEFT_SHIFT = 340,
+    LEFT_CTRL = 341,
+    LEFT_ALT = 342,
+    NUM_1 = 49,
+    NUM_2 = 50,
+    NUM_3 = 51,
+    NUM_4 = 52,
+    NUM_5 = 53,
+    NUM_6 = 54,
+    NUM_7 = 55,
+    NUM_8 = 56,
+    NUM_9 = 57,
+    F1 = 290,
+    F2 = 291,
+    F3 = 292,
+    F4 = 293,
+    F5 = 294,
+    UP = 265,
+    DOWN = 264,
+    LEFT = 263,
+    RIGHT = 262
 }
 
 ---@type table<string, number>
