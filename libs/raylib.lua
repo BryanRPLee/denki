@@ -17,6 +17,9 @@ ffi.cdef [[
         Vector3 min;
         Vector3 max;
     } BoundingBox;
+    typedef struct Sound {
+        char _opaque[48];
+    } Sound;
 
     void InitWindow(int width, int height, const char* title);
     void CloseWindow(void);
@@ -48,6 +51,16 @@ ffi.cdef [[
     void EnableCursor(void);
     Vector2 GetMouseDelta(void);
     void SetMousePosition(int x, int y);
+
+    void InitAudioDevice(void);
+    void CloseAudioDevice(void);
+    bool IsAudioDeviceReady(void);
+    Sound LoadSound(const char* fileName);
+    void UnloadSound(Sound sound);
+    void PlaySound(Sound sound);
+    void StopSound(Sound sound);
+    bool IsSoundPlaying(Sound sound);
+    void SetSoundVolume(Sound sound, float volume);
 ]]
 
 ---@class Vector2
@@ -76,6 +89,8 @@ ffi.cdef [[
 ---@field min Vector3
 ---@field max Vector3
 
+---@class Sound
+
 ---@class Raylib
 ---@field InitWindow fun(width: integer, height: integer, title: string)
 ---@field CloseWindow fun()
@@ -102,6 +117,15 @@ ffi.cdef [[
 ---@field EnableCursor fun()
 ---@field GetMouseDelta fun(): Vector2
 ---@field SetMousePosition fun(x: integer, y: integer)
+---@field InitAudioDevice fun()
+---@field CloseAudioDevice fun()
+---@field IsAudioDeviceReady fun(): boolean
+---@field LoadSound fun(fileName: string): Sound
+---@field UnloadSound fun(sound: Sound)
+---@field PlaySound fun(sound: Sound)
+---@field StopSound fun(sound: Sound)
+---@field IsSoundPlaying fun(sound: Sound): boolean
+---@field SetSoundVolume fun(sound: Sound, volume: number)
 
 ---@cast raylib Raylib
 return raylib

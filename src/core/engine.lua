@@ -7,6 +7,7 @@ local Mesh = require("src.renderer.mesh")
 local Physics = require("src.physics.physics")
 local Rigidbody = require("src.physics.rigidbody")
 local Player = require("src.core.player")
+local Audio = require("src.audio.audio")
 local rl = require("libs.raylib")
 
 ---@class Engine
@@ -30,10 +31,7 @@ function Engine.new()
     self.input = Input.new()
     self.physics = Physics.new()
     self.scene = Scene.new("MainScene")
-
-    -- Audio system (disabled for now due to miniaudio FFI issues)
-    -- self.audio = Audio.new()
-    self.audio = nil
+    self.audio = Audio.new()
 
     return self
 end
