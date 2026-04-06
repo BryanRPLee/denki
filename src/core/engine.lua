@@ -16,6 +16,7 @@ local rl = require("libs.raylib")
 ---@field physics Physics
 ---@field scene Scene
 ---@field player Player
+---@field audio Audio
 ---@field running boolean
 local Engine = {}
 Engine.__index = Engine
@@ -24,11 +25,15 @@ Engine.__index = Engine
 function Engine.new()
     local self = setmetatable({}, Engine)
 
-    self.renderer = Renderer.new(1280, 720, "Denki - Phase 1", 60)
+    self.renderer = Renderer.new(1280, 720, "Denki - Phase 5", 60)
     self.camera = Camera.new(10.0, 10.0, 10.0)
     self.input = Input.new()
     self.physics = Physics.new()
     self.scene = Scene.new("MainScene")
+
+    -- Audio system (disabled for now due to miniaudio FFI issues)
+    -- self.audio = Audio.new()
+    self.audio = nil
 
     return self
 end
@@ -66,14 +71,14 @@ function Engine:draw()
     local rb = self.player.rb
     local t = self.player.entity.transform
 
-    rl.DrawText("Denki - Phase 4", 10, 40, 20, Renderer.colors.DARKGRAY)
+    rl.DrawText("Denki - Phase 5", 10, 40, 20, Renderer.colors.DARKGRAY)
     rl.DrawText("Entities: " .. self.scene:entityCount(), 10, 65, 18, Renderer.colors.DARKGRAY)
     rl.DrawText(string.format("Pos: %.1f, %.1f, %.1f", t.position.x, t.position.y, t.position.z), 10, 88, 18,
         Renderer.colors.DARKGRAY)
     rl.DrawText(string.format("Vel: %.1f, %.1f, %.1f", rb.velocity.x, rb.velocity.y, rb.velocity.z), 10, 111, 18,
         Renderer.colors.DARKGRAY)
     rl.DrawText("Grounded: " .. tostring(rb.isGrounded), 10, 134, 18, Renderer.colors.DARKGRAY)
-    rl.DrawText("WASD: Move  |  SPACE: Jump  |  Mouse: Look  |  ESC: Quit", 10, 157, 18, Renderer.colors.DARKGRAY)
+    rl.DrawText("WASD: Move  |  SPACE: Jump  |  Mouse: Look+Fire  |  ESC: Quit", 10, 157, 18, Renderer.colors.DARKGRAY)
 
     self.renderer:endFrame()
 end
@@ -94,6 +99,9 @@ end
 function Engine:shutdown()
     self.input:enableCursor()
     self.scene:clear()
+    if self.audio then
+        self.audio:shutdown()
+    end
     self.renderer:shutdown()
     print("[Engine] Shutdown complete.")
 end
@@ -128,7 +136,7 @@ function Engine:_populateScene()
     makeStaticCube("CubeC", -5, 0.75, -5, 1.5, 1.5, 1.5, Renderer.colors.GREEN)
     makeStaticCube("Wall1", 10, 2, 0, 1, 4, 10, Renderer.colors.DARKGRAY)
 
-    self.player = Player.new(self.physics)
+    self.player = Player.new(self.physics, self.audio)
     self.scene:add(self.player.entity)
 
     print("[Engine] Scene populated: " .. self.scene:entityCount() .. " entities")

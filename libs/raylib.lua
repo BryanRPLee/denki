@@ -40,6 +40,9 @@ ffi.cdef [[
 
     bool IsKeyDown(int key);
     bool IsKeyPressed(int key);
+    bool IsKeyReleased(int key);
+    bool IsMouseButtonDown(int button);
+    bool IsMouseButtonPressed(int button);
 
     void DisableCursor(void);
     void EnableCursor(void);
@@ -92,6 +95,9 @@ ffi.cdef [[
 ---@field DrawText fun(text: string, posX: integer, posY: integer, fontSize: integer, color: Color)
 ---@field IsKeyDown fun(key: integer): boolean
 ---@field IsKeyPressed fun(key: integer): boolean
+---@field IsKeyReleased fun(key: integer): boolean
+---@field IsMouseButtonDown fun(button: integer): boolean
+---@field IsMouseButtonPressed fun(button: integer): boolean
 ---@field DisableCursor fun()
 ---@field EnableCursor fun()
 ---@field GetMouseDelta fun(): Vector2
