@@ -16,10 +16,12 @@ Renderer.colors = {
 
 function Renderer.new(width, height, title, fps)
     local self = setmetatable({}, Renderer)
+
     self.width = width or 1280
     self.height = height or 720
-    self.title = title or "LuaEngine"
+    self.title = title or "Denki"
     self.fps = fps or 60
+    
     return self
 end
 

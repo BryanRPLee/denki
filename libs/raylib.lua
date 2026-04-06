@@ -23,6 +23,7 @@ ffi.cdef[[
     bool WindowShouldClose(void);
     void SetTargetFPS(int fps);
     int GetFPS(void);
+    float GetFrameTime(void);
 
     void BeginDrawing(void);
     void EndDrawing(void);
@@ -36,6 +37,65 @@ ffi.cdef[[
 
     void DrawFPS(int posX, int posY);
     void DrawText(const char* text, int posX, int posY, int fontSize, Color color);
+
+    bool IsKeyDown(int key);
+    bool IsKeyPressed(int key);
+
+    void DisableCursor(void);
+    void EnableCursor(void);
+    Vector2 GetMouseDelta(void);
+    void SetMousePosition(int x, int y);
 ]]
 
+---@class Vector2
+---@field x number
+---@field y number
+
+---@class Vector3
+---@field x number
+---@field y number
+---@field z number
+
+---@class Color
+---@field r number
+---@field g number
+---@field b number
+---@field a number
+
+---@class Camera3D
+---@field position Vector3
+---@field target Vector3
+---@field up Vector3
+---@field fovy number
+---@field projection integer
+
+---@class BoundingBox
+---@field min Vector3
+---@field max Vector3
+
+---@class Raylib
+---@field InitWindow fun(width: integer, height: integer, title: string)
+---@field CloseWindow fun()
+---@field WindowShouldClose fun(): boolean
+---@field SetTargetFPS fun(fps: integer)
+---@field GetFPS fun(): integer
+---@field GetFrameTime fun(): number
+---@field BeginDrawing fun()
+---@field EndDrawing fun()
+---@field ClearBackground fun(color: Color)
+---@field BeginMode3D fun(camera: Camera3D)
+---@field EndMode3D fun()
+---@field DrawCube fun(position: Vector3, width: number, height: number, length: number, color: Color)
+---@field DrawCubeWires fun(position: Vector3, width: number, height: number, length: number, color: Color)
+---@field DrawGrid fun(slices: integer, spacing: number)
+---@field DrawFPS fun(posX: integer, posY: integer)
+---@field DrawText fun(text: string, posX: integer, posY: integer, fontSize: integer, color: Color)
+---@field IsKeyDown fun(key: integer): boolean
+---@field IsKeyPressed fun(key: integer): boolean
+---@field DisableCursor fun()
+---@field EnableCursor fun()
+---@field GetMouseDelta fun(): Vector2
+---@field SetMousePosition fun(x: integer, y: integer)
+
+---@cast raylib Raylib
 return raylib
