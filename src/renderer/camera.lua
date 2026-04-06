@@ -45,37 +45,6 @@ function Camera:update(input, dt)
         self.pitch = -89.0
     end
 
-    local yawRad = toRad(self.yaw)
-    local speed = self.moveSpeed * dt
-
-    if input:isKeyDown("W") then
-        self.x = self.x + math.sin(yawRad) * speed
-        self.z = self.z + math.cos(yawRad) * speed
-    end
-
-    if input:isKeyDown("S") then
-        self.x = self.x - math.sin(yawRad) * speed
-        self.z = self.z - math.cos(yawRad) * speed
-    end
-
-    if input:isKeyDown("A") then
-        self.x = self.x + math.cos(yawRad) * speed
-        self.z = self.z - math.sin(yawRad) * speed
-    end
-
-    if input:isKeyDown("D") then
-        self.x = self.x - math.cos(yawRad) * speed
-        self.z = self.z + math.sin(yawRad) * speed
-    end
-
-    if input:isKeyDown("SPACE") then
-        self.y = self.y + speed
-    end
-
-    if input:isKeyDown("LEFT_SHIFT") then
-        self.y = self.y - speed
-    end
-
     self:_updateData()
 end
 

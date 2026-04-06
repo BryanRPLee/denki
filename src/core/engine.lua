@@ -4,8 +4,10 @@ local Input = require("src.input.input")
 local Scene = require("src.core.scene")
 local Entity = require("src.core.entity")
 local Mesh = require("src.renderer.mesh")
+local Physics = require("src.physics.physics")
+local Rigidbody = require("src.physics.rigidbody")
+local Player = require("src.core.player")
 local rl = require("libs.raylib")
-local ffi = require("ffi")
 
 local Engine = {}
 Engine.__index = Engine
@@ -16,6 +18,7 @@ function Engine.new()
     self.renderer = Renderer.new(1280, 720, "Denki - Phase 1", 60)
     self.camera = Camera.new(10.0, 10.0, 10.0)
     self.input = Input.new()
+    self.physics = Physics.new()
     self.scene = Scene.new("MainScene")
 
     return self
@@ -35,6 +38,8 @@ function Engine:update()
         self.running = false
     end
 
+    self.player:update(self.input, self.camera, dt)
+    self.physics:update(dt)
     self.camera:update(self.input, dt)
     self.scene:update(dt)
 end
@@ -49,9 +54,17 @@ function Engine:draw()
 
     self.camera:end3D()
 
-    rl.DrawText("Denki - Phase 3", 10, 40, 20, Renderer.colors.DARKGRAY)
+    local rb = self.player.rb
+    local t = self.player.entity.transform
+
+    rl.DrawText("Denki - Phase 4", 10, 40, 20, Renderer.colors.DARKGRAY)
     rl.DrawText("Entities: " .. self.scene:entityCount(), 10, 65, 18, Renderer.colors.DARKGRAY)
-    rl.DrawText("WASD: Move  |  Mouse: Look  |  ESC: Quit", 10, 88, 18, Renderer.colors.DARKGRAY)
+    rl.DrawText(string.format("Pos: %.1f, %.1f, %.1f", t.position.x, t.position.y, t.position.z), 10, 88, 18,
+        Renderer.colors.DARKGRAY)
+    rl.DrawText(string.format("Vel: %.1f, %.1f, %.1f", rb.velocity.x, rb.velocity.y, rb.velocity.z), 10, 111, 18,
+        Renderer.colors.DARKGRAY)
+    rl.DrawText("Grounded: " .. tostring(rb.isGrounded), 10, 134, 18, Renderer.colors.DARKGRAY)
+    rl.DrawText("WASD: Move  |  SPACE: Jump  |  Mouse: Look  |  ESC: Quit", 10, 157, 18, Renderer.colors.DARKGRAY)
 
     self.renderer:endFrame()
 end
@@ -77,32 +90,28 @@ function Engine:shutdown()
 end
 
 function Engine:_populateScene()
-    local cubeA = Entity.new("CubeA")
-    cubeA.transform:setPosition(0, 1, 0)
-    cubeA.transform:setScale(2, 2, 2)
-    cubeA:addComponent("mesh", Mesh.new("cube", Renderer.colors.RED))
-    self.scene:add(cubeA)
+    local function makeStaticCube(name, x, y, z, sx, sy, sz, color)
+        local e = Entity.new(name)
+        e.transform:setPosition(x, y, z)
+        e.transform:setScale(sx, sy, sz)
+        e:addComponent("mesh", Mesh.new("cube", color))
+        e:addTag("obstacle")
 
-    local cubeB = Entity.new("CubeB")
-    cubeB.transform:setPosition(5, 0.75, 5)
-    cubeB.transform:setScale(1.5, 1.5, 1.5)
-    cubeB:addComponent("mesh", Mesh.new("cube", Renderer.colors.BLUE))
-    cubeB:addTag("obstacle")
-    self.scene:add(cubeB)
+        local rb = Rigidbody.new({ isStatic = true })
+        e:addComponent("rigidbody", rb)
+        self.physics:register(rb)
+        self.scene:add(e)
 
-    local cubeC = Entity.new("CubeC")
-    cubeC.transform:setPosition(-5, 0.75, -5)
-    cubeC.transform:setScale(1.5, 1.5, 1.5)
-    cubeC:addComponent("mesh", Mesh.new("cube", Renderer.colors.GREEN))
-    cubeC:addTag("obstacle")
-    self.scene:add(cubeC)
+        return e
+    end
 
-    local cubeChild = Entity.new("CubeA_Child")
-    cubeChild.transform:setPosition(3, 1, 0)
-    cubeChild.transform:setScale(1, 1, 1)
-    cubeChild:addComponent("mesh", Mesh.new("cube", Renderer.colors.LIGHTGRAY))
-    cubeA:addChild(cubeChild)
-    self.scene:add(cubeChild)
+    makeStaticCube("CubeA", 0, 1, 0, 2, 2, 2, Renderer.colors.RED)
+    makeStaticCube("CubeB", 5, 0.75, 5, 1.5, 1.5, 1.5, Renderer.colors.BLUE)
+    makeStaticCube("CubeC", -5, 0.75, -5, 1.5, 1.5, 1.5, Renderer.colors.GREEN)
+    makeStaticCube("Wall1", 10, 2, 0, 1, 4, 10, Renderer.colors.DARKGRAY)
+
+    self.player = Player.new(self.physics)
+    self.scene:add(self.player.entity)
 
     print("[Engine] Scene populated: " .. self.scene:entityCount() .. " entities")
 end
